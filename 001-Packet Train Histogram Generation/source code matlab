@@ -1,0 +1,28 @@
+length = 100000; % this variable defines the lengh of your packet Train
+probability= .9;% this variable defines the probability that a particular time slot will have a packet
+tracker= zeros(1,length);% tracker keeps track of the frequency a chain of consecutive packets occurs
+train = zeros(1,length); % The Packet train 1x100000 (=row vector) containing 100000 zeros.
+pointer1=1;% pointer for packet train 
+counter=0; % counter variabel that keeps trck of how long a chain of consecutive packets is 
+while( length >= pointer1 )% run through the packet train and check every time slot
+     x= rand;               % generate a random number
+    if x <=probability     
+       train(pointer1) = 1; % this time slot should have a packet
+       counter=counter +1 ;% increment the counter variable which keeps track of how long a chain is
+    elseif counter==0 
+    else
+         tracker(counter)= tracker(counter)+1; % you have reached the end of a chain time to record data
+         counter=0; %reset counter variable
+    end
+  pointer1 = pointer1 + 1;% continue to move throught the packet train
+end
+bottomFreq=sum(tracker); % calculate the total number of chains found
+totFreq=tracker/bottomFreq;% calculate the frequency of chains of varying sizes
+stem(totFreq)   % plot graph
+title('Graph Showing Probability of getting a packet p=0.9')
+xlabel('Packet Train Length')
+ylabel('Relative Frequency of Packet Train in Percentage')
+axis([0 30 0 1])
+
+
+
