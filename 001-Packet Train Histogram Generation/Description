@@ -1,0 +1,14 @@
+The Project:
+Generates a histogram that shows the percentage or relative frequency of packet trains that are of a certain length.
+
+Inputs to the program:
+A “packet train” of length i is a sequence of i consecutive packets (with no gaps or idle slots in between). 
+In a given time slot the probability that a station has a single packet to transmit is p. The probability of no packet
+in a slot (idle slot) is 1-p.  One packet fills one time slot. The program uses a random number generator function to 
+simulate the probability that a slot has a packet or not. The number of time slots to be 100,000. 
+The relative frequency of a packet train of length i is the number of times that packet trains of length i occurs 
+divided by the total number of packet trains of all lengths found in your simulation.  
+
+Output of your program:
+A histogram showing the relationship of the packet train length and the percentage or relative frequency of that specific 
+packet length. 
