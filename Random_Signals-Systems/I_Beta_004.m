@@ -1,7 +1,13 @@
-%betarnd(..)
-clear
-close all
-clc
+clear % Remove any exsiting variables in the workspace
+close all % Close all figure windows
+clc % Clear Command Window
+%**************************************************************************
+% Program name:     Beta.m
+% Author:           Victor Tellez
+% Date Created:     March 01, 2017
+% Last Update:      March 05, 2017
+%
+%**************************************************************************
 
 A = 700; 
 B = 300;
