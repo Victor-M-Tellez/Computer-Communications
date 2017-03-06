@@ -1,7 +1,14 @@
-clear
-close all
-clc
-p = .7;          % probability of success for each trial 0 ≤ p ≤ 1
+clear % Remove any exsiting variables in the workspace
+close all % Close all figure windows
+clc % Clear Command Window
+%**************************************************************************
+% Program name:     Binomial.m
+% Author:           Victor Tellez
+% Date Created:     March 01, 2017
+% Last Update:      March 05, 2017
+%
+%**************************************************************************
+p = .7;          % probability of success for each trial 0 ? p ? 1
 NTrials = 10;    % the number of trials
 NSize = 10000;   % The number of random numbers from the binomial 
                  % distribution with parameters NTrials and P that we want
