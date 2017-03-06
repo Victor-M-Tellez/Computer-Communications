@@ -1,7 +1,13 @@
-%normrnd(..)
-clear
-close all
-clc
+clear % Remove any exsiting variables in the workspace
+close all % Close all figure windows
+clc % Clear Command Window
+%**************************************************************************
+% Program name:     Normal.m
+% Author:           Victor Tellez
+% Date Created:     March 01, 2017
+% Last Update:      March 05, 2017
+%
+%**************************************************************************
 NSize = 10000;
 sigma = 7;
 mu    = 3;
