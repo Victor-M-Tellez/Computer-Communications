@@ -1,0 +1,124 @@
+%size
+angleOfRotation = 0; %og 0
+gravity = 1.1;
+ground = -190;
+hitGround = false;
+cubesize = 15;
+rotationSpeed  = 10;%og 10, 500
+foculLength = 30;
+
+totaltime=80;% og 14
+timestep = 1; % og .2
+pixelSize = .01;
+frameSize = 1000;% original 256
+startingPointX = -130; % og -20
+startingPointY = -20; %og -20
+startingPointZ = 500; %og 500
+velocityX=3;
+velocityY=2;
+velocityZ=4;
+
+AA=-50;
+CC=50;
+BB=AA+cubesize;
+DD=CC+cubesize;
+ogx1 = AA;%OG -50
+ogy1 = AA;%OG -50
+ogz1 = CC;%OG 200
+ogx2 = BB;%OG -45
+ogy2 = BB;%OG -45
+ogz2 = DD;%OG 205;
+
+%define 8 points of the cube in world coordinate
+V1=[ogx1,ogy1,ogz1];%(X, Y, Z)
+V3=[ogx2,ogy2,ogz1];
+V2=[ogx1,ogy2,ogz1];
+V4=[ogx2,ogy1,ogz1];
+
+V7=[ogx1,ogy1,ogz2];
+V8=[ogx2,ogy2,ogz2];
+V6=[ogx1,ogy2,ogz2];
+V5=[ogx2,ogy1,ogz2];
+f= foculLength;
+velocity = [ velocityX velocityY velocityZ];
+
+% og 30
+%calibration matrix, camera projection
+K=[f 0 0;
+   0 f 0;
+   0 0 1];
+%theta is the angle for the rotation
+theta0= angleOfRotation;
+w0=rotationSpeed;%deg/sec
+% d is 'row' which is the magnitude of the vector
+d=sqrt((V8-V1)*(V8-V1)');
+%n is the unit vector
+n=(V8-V1)/d;%axis unit vector
+%
+N=[0 -n(3) n(2)
+    n(3) 0 -n(1)
+   -n(2) n(1) 0];%eq.32
+%Starting Matrix
+T0=[startingPointX startingPointY startingPointZ];
+p=pixelSize; %(mm)
+timepassed = 1;
+
+%for t=0:0.2:14
+for t=0:timestep:totaltime
+    timepassed= timepassed*gravity;
+    acceleration = [timepassed 0 0];
+    theta=theta0+w0*t;
+    
+    if hitGround==false
+        T=T0+ velocity*t - acceleration;
+    else
+        T(1)= ground-5;
+        T(2)= T0(2) + velocity(2)*t;
+    end
+    
+    if T(1)< ground
+        hitGround = true;
+    end
+    
+    %R is rotation
+    R=eye(3,3)+sind(theta)*N+(1-cosd(theta))*N*N;%eye() is identity matrix
+ 
+    v1=Map2D(K,R,T,V1,V1,p);
+    v2=Map2D(K,R,T,V1,V2,p);
+    v3=Map2D(K,R,T,V1,V3,p);
+    v4=Map2D(K,R,T,V1,V4,p);
+    v5=Map2D(K,R,T,V1,V5,p);
+    v6=Map2D(K,R,T,V1,V6,p);
+    v7=Map2D(K,R,T,V1,V7,p);
+    v8=Map2D(K,R,T,V1,V8,p);
+    
+    
+    A = zeros(frameSize, frameSize);
+    A = Line(A, v1,v2, frameSize);
+    A = Line(A, v2,v3, frameSize);
+    A = Line(A, v3,v4, frameSize);
+    A = Line(A, v4,v1, frameSize);
+    A = Line(A, v7,v6, frameSize);
+    A = Line(A, v6,v8, frameSize);
+    A = Line(A, v8,v5, frameSize);
+    A = Line(A, v5,v7, frameSize);
+    A = Line(A, v1,v7, frameSize);
+    A = Line(A, v2,v6, frameSize);
+    A = Line(A, v3,v8, frameSize);
+    A = Line(A, v4,v5, frameSize);
+   
+    for y= v1(2):v2(2)
+          p1 = Map2D(K,R,T,V1,V4,p);
+          p2 = Map2D(K,R,T,V1,V1,p);
+          p1(2)=y;
+          p2(2)=y;  
+          A = Line(A, p1, p2, frameSize);
+    end
+    
+    A=mat2gray(A);
+    imshow(A);
+    
+   %pause
+ 
+    
+end
